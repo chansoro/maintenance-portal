@@ -3,14 +3,11 @@
 session_start();
 
 // --- 1. ADMIN-ONLY Bouncer ---
-// Check if user is logged in AND if their role is 'admin'
 if ( !isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin' ) {
-    // If not logged in or not an admin, send them to the login page
     header("Location: login.html?status=admin_required");
     exit;
 }
 
-// If we are here, the user is an admin.
 $username = $_SESSION['username'];
 
 // --- Database Connection ---
@@ -51,7 +48,7 @@ $conn = null;
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Portal</title>
-    <link rel="stylesheet" href="style-kineme.css">
+    <link rel="stylesheet" href="style.css">
     
     <style>
         .full-width-card { flex: 1; }
