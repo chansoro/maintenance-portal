@@ -147,22 +147,18 @@ $conn = null;
                             }
 
                             // --- Rate/Feedback Form (Only appears if Done) ---
-                            // FIX: Updated styles to make the input box wide
                             if ($is_done) {
                                 echo '<div style="margin-top: 15px; padding-top: 10px; border-top: 1px solid #eee; width: 100%;">';
                                 
                                 if (!empty($row['completion_feedback'])) {
                                     echo '<span style="font-size: 13px; color: green;">✔ Feedback sent: "' . htmlspecialchars($row['completion_feedback']) . '"</span>';
                                 } else {
-                                    // 1. Added 'align-items: center' to the form to force vertical alignment
                                     echo '<form action="submit_completion_feedback.php" method="POST" style="display: flex; gap: 10px; width: 100%; align-items: center;">';
                                         
                                         echo '<input type="hidden" name="task_id" value="' . $row['id'] . '">';
                                         
-                                        // 2. Input: Height 38px, Border 1px
                                         echo '<input type="text" name="feedback" placeholder="How was the work?" required style="flex-grow: 1; min-width: 0; height: 38px; padding: 0 10px; font-size: 13px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; margin: 0;">';
                                         
-                                        // 3. Button: Height 38px, Border 1px (Transparent) - Matching the input exactly
                                         echo '<button type="submit" style="width: auto; height: 38px; padding: 0 15px; background: #28a745; color: white; border: 1px solid #28a745; border-radius: 4px; cursor: pointer; font-size: 13px; white-space: nowrap; box-sizing: border-box; margin: 0;">Rate</button>';
                                     
                                     echo '</form>';
