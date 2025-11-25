@@ -21,12 +21,12 @@ header {
     max-width: 1200px;
     margin: 30px auto;
     padding: 0 20px;
-    gap: 30px; /* Space between the two columns */
+    gap: 30px;
 }
 
 /* Section Cards */
 .card {
-    flex: 1; /* Makes both columns equal width */
+    flex: 1;
     background-color: white;
     padding: 25px;
     border-radius: 8px;
@@ -51,7 +51,7 @@ textarea {
     margin-bottom: 10px;
     border: 1px solid #ccc;
     border-radius: 4px;
-    box-sizing: border-box; /* Includes padding and border in the element's total width and height */
+    box-sizing: border-box;
 }
 
 button {
@@ -96,19 +96,13 @@ button {
 .badge-success { background-color: #28a745; }
 .badge-danger { background-color: #dc3545; }
 
-/* ---- ADD THE NEW RULE HERE ---- */
 .badge-secondary { background-color: #6c757d; } /* Gray */
 
-/* Responsive Design (for smaller screens) */
 @media (max-width: 768px) {
     .container {
         flex-direction: column;
     }
 }
-/* =========================================
-CHATBOT STYLES
-========================================= 
-*/
 
 /* The floating bubble */
 #chat-bubble {
@@ -141,7 +135,7 @@ CHATBOT STYLES
     background-color: white;
     border-radius: 12px;
     box-shadow: 0 5px 20px rgba(0,0,0,0.2);
-    overflow: hidden; /* Keeps everything inside the rounded corners */
+    overflow: hidden;
     display: flex;
     flex-direction: column;
     
@@ -190,7 +184,7 @@ CHATBOT STYLES
 #chat-log {
     flex: 1;
     padding: 15px;
-    overflow-y: auto; /* Lets the messages scroll */
+    overflow-y: auto;
     background-color: #f4f7f6;
     display: flex;
     flex-direction: column;
@@ -208,13 +202,13 @@ CHATBOT STYLES
 .bot-message {
     background-color: #e9ecef; /* Light gray */
     color: #333;
-    align-self: flex-start; /* Aligns to the left */
+    align-self: flex-start; 
 }
 
 .user-message {
     background-color: #007bff; /* Blue */
     color: white;
-    align-self: flex-end; /* Aligns to the right */
+    align-self: flex-end;
 }
 
 /* The input form */
@@ -243,5 +237,5 @@ CHATBOT STYLES
     border: none;
     padding: 10px 20px;
     margin: 0;
-    width: auto; /* Override default button width */
+    width: auto;
 }
