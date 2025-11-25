@@ -45,7 +45,7 @@ $conn = null;
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Full Scheduler - Feedback Portal</title>
-    <link rel="stylesheet" href="style-kineme.css">
+    <link rel="stylesheet" href="style.css">
     
     <style>
         .full-width-card {
