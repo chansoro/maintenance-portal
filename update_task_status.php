@@ -22,7 +22,7 @@ if (!isset($data['task_id']) || !isset($data['status'])) {
 }
 
 $task_id = $data['task_id'];
-$new_status = $data['status'] === 'done' ? 'done' : 'pending'; // Ensure status is valid
+$new_status = $data['status'] === 'done' ? 'done' : 'pending';
 
 // --- Database Connection ---
 require 'db_connect.php';
@@ -32,7 +32,6 @@ try {
     $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
     // --- 4. Update the task status ---
-    // IMPORTANT: We also check user_id to make sure the user owns this task!
     $sql = "UPDATE tasks SET status = :status WHERE id = :task_id AND user_id = :user_id";
 
     $stmt = $conn->prepare($sql);
@@ -46,7 +45,6 @@ try {
     if ($stmt->rowCount() > 0) {
         echo json_encode(['success' => true]);
     } else {
-        // This happens if the task ID doesn't exist or doesn't belong to the user
         echo json_encode(['success' => false, 'message' => 'Task not found or permission denied']);
     }
 
