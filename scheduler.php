@@ -13,11 +13,11 @@ $username = $_SESSION['username'];
 $user_id = $_SESSION['user_id'];
 
 // --- Database Connection ---
-$servername = "localhost";
-$db_username = "root";
-$db_password = "";
-$dbname = "portal_db";
-$port = 3307;
+$servername = "sql207.infinityfree.com";
+$db_username = "if0_40254173";
+$db_password = "107MADAFAKA";
+$dbname = "if0_40254173_portal";
+$port = 3306;
 
 $all_suggestions = []; // Initialize an empty array
 
@@ -82,7 +82,7 @@ $conn = null;
 <body>
 
     <header>
-        <h1>🛠️ Full Maintenance Scheduler</h1>
+        <h1>🛠️ Full Maintenance Scheduler 🛠️</h1>
         
         <div style="background-color: #003a75; padding: 10px; border-radius: 5px; margin-top: 15px; display: inline-block;">
             Welcome, <strong><?php echo htmlspecialchars($username); ?>!</strong>

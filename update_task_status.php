@@ -24,15 +24,11 @@ if (!isset($data['task_id']) || !isset($data['status'])) {
 $task_id = $data['task_id'];
 $new_status = $data['status'] === 'done' ? 'done' : 'pending'; // Ensure status is valid
 
-// --- 3. Database Connection ---
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "portal_db";
-$port = 3307;
+// --- Database Connection ---
+require 'db_connect.php';
 
 try {
-    $conn = new PDO("mysql:host=$servername;port=$port;dbname=$dbname", $username, $password);
+    $conn = new PDO("mysql:host=$servername;port=$port;dbname=$dbname", $db_username, $db_password);
     $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
     // --- 4. Update the task status ---

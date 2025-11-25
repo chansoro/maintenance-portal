@@ -5,14 +5,11 @@
         die("You must be logged in to add a task.");
     }
     
-    $servername = "localhost";
-    $username = "root";
-    $password = "";
-    $dbname = "portal_db";
-    $port = 3307;
+    // --- Database Connection ---
+require 'db_connect.php';
     
     try {
-        $conn = new PDO("mysql:host=$servername;port=$port;dbname=$dbname", $username, $password);
+        $conn = new PDO("mysql:host=$servername;port=$port;dbname=$dbname", $db_username, $db_password);
         $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     
         // Get Data

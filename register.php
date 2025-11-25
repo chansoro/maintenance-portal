@@ -7,16 +7,12 @@
  * It hashes the password and inserts the user into the 'users' table.
  */
 
-// --- 1. Database Connection Settings ---
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "portal_db";
-$port = 3307;
+// --- Database Connection ---
+require 'db_connect.php';
 
 try {
     // --- 2. Connect to the Database ---
-    $conn = new PDO("mysql:host=$servername;port=$port;dbname=$dbname", $username, $password);
+    $conn = new PDO("mysql:host=$servername;port=$port;dbname=$dbname", $db_username, $db_password);
     $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
     // --- 3. Get Data from the Form ---
