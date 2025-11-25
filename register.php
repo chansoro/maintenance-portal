@@ -1,11 +1,4 @@
 <?php
-/*
- * =========================================
- * REGISTER.PHP
- * =========================================
- * This script handles new user registration.
- * It hashes the password and inserts the user into the 'users' table.
- */
 
 // --- Database Connection ---
 require 'db_connect.php';
@@ -21,8 +14,6 @@ try {
     $password_form = $_POST['password'];
 
     // --- 4. SECURE THE PASSWORD ---
-    // We must HASH the password before saving it.
-    // This creates a long, irreversible string.
     $hashed_password = password_hash($password_form, PASSWORD_DEFAULT);
 
     // --- 5. Prepare and Execute the SQL Query ---
@@ -39,8 +30,6 @@ try {
     $stmt->execute();
 
     // --- 6. Redirect to Login Page on Success ---
-    // If registration is successful, send them to the login page.
-    // (We will create login.html next)
     header("Location: login.html?status=reg_success");
     exit();
 
