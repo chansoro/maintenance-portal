@@ -19,7 +19,7 @@ $db_password = "107MADAFAKA";
 $dbname = "if0_40254173_portal";
 $port = 3306;
 
-$all_suggestions = []; // Initialize an empty array
+$all_suggestions = [];
 
 try {
     $conn = new PDO("mysql:host=$servername;port=$port;dbname=$dbname", $db_username, $db_password);
@@ -34,7 +34,6 @@ try {
     $all_tasks = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 } catch(PDOException $e) {
-    // Handle database errors gracefully
     $db_error = "Error connecting to database: ". $e->getMessage();
 }
 $conn = null;
@@ -50,12 +49,12 @@ $conn = null;
     
     <style>
         .full-width-card {
-            flex: 1; /* Make this card take all the space */
+            flex: 1;
         }
         
         table {
             width: 100%;
-            border-collapse: collapse; /* Clean table lines */
+            border-collapse: collapse;
             margin-top: 20px;
         }
         
