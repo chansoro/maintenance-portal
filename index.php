@@ -1,8 +1,6 @@
 <?php
-// Start the session to access session variables
 session_start();
 
-// Check if the user is logged in
 if ( !isset($_SESSION['user_id']) ) {
     header("Location: login.html");
     exit;
@@ -12,7 +10,6 @@ $username = $_SESSION['username'];
 $user_id = $_SESSION['user_id'];
 $role = $_SESSION['role'];
 
-// --- Database Connection ---
 require 'db_connect.php';
 
 $tasks = []; 
@@ -56,21 +53,26 @@ $conn = null;
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Maintenance Scheduler</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style-kineme.css">
 </head>
 <body>
 
     <header>
         <h1>🛠️ Preventive Maintenance Scheduler 🛠️</h1>
         
-        <div style="background-color: #003a75; padding: 10px; border-radius: 5px; margin-top: 15px; display: block; width: fit-content; margin-left: auto; margin-right: auto;">
-            Welcome, <strong><?php echo htmlspecialchars($username); ?>!</strong>
-            <a href="logout.php" style="color: #ffb3b3; margin-left: 20px; text-decoration: underline;">Logout</a>
-            <?php
-            if ($role === 'admin') {
-                echo '<a href="admin.php" style="color: #a7ffa7; margin-left: 20px; text-decoration: underline;">Admin Portal</a>';
-            }
-            ?>
+        <div class="user-menu">
+            <span>Welcome, <strong><?php echo htmlspecialchars($username); ?>!</strong></span>
+            
+            <span style="opacity: 0.5;">|</span>
+
+            <button id="openFeedback" class="header-btn">Give Feedback</button>
+            
+            <a href="logout.php" class="header-btn logout-link">Logout</a>
+            
+            <?php if ($role === 'admin'): ?>
+                <span style="opacity: 0.5;">|</span>
+                <a href="admin.php" class="header-btn" style="color: #a7ffa7;">Admin Portal</a>
+            <?php endif; ?>
         </div>
     </header>
 
@@ -103,14 +105,12 @@ $conn = null;
                 } else {
                     foreach ($tasks as $row) {
                         
-                        // Priority Badge Logic
                         $badge_class = 'badge-primary'; 
                         $priority_text = htmlspecialchars($row['priority']);
                         if ($row['priority'] == 'Urgent') { $badge_class = 'badge-danger'; } 
                         elseif ($row['priority'] == 'High') { $badge_class = 'badge-warning'; } 
                         elseif ($row['priority'] == 'Low') { $badge_class = 'badge-success'; }
 
-                        // Deadline Logic
                         $deadline_text = 'No deadline set';
                         if (!empty($row['deadline'])) {
                             try {
@@ -119,34 +119,28 @@ $conn = null;
                             } catch (Exception $e) {}
                         }
 
-                        // Status Logic
                         $is_done = ($row['status'] === 'done');
                         $status_text = $is_done ? 'Done' : 'Pending';
                         $status_badge_class = $is_done ? 'badge-success' : 'badge-secondary';
 
-                        // --- PRINT HTML ---
                         echo '<div class="schedule-item" style="flex-direction: column; align-items: flex-start; gap: 8px; padding-bottom: 15px;">';
                             
-                            // Top row
                             echo '<div style="display: flex; justify-content: space-between; width: 100%; align-items: center;">';
                                 echo '<span style="font-weight: bold; font-size: 16px;">' . htmlspecialchars($row['details']) . '</span>';
                                 echo '<span class="status-badge ' . $status_badge_class . '" style="font-size: 11px;">' . $status_text . '</span>';
                             echo '</div>';
                             
-                            // Middle row
                             echo '<div style="display: flex; justify-content: space-between; width: 100%; margin-top: 5px;">';
                                 echo '<span class="status-badge ' . $badge_class . '">' . $priority_text . '</span>';
                                 echo '<span style="color: #666; font-size: 14px;">' . $deadline_text . '</span>';
                             echo '</div>';
 
-                            // Show Worker (if assigned)
                             if (!empty($row['assigned_worker'])) {
                                 echo '<div style="font-size: 13px; color: #007bff; margin-top: 5px;">';
                                     echo '👷 Assigned to: <strong>' . htmlspecialchars($row['assigned_worker']) . '</strong>';
                                 echo '</div>';
                             }
 
-                            // --- Rate/Feedback Form (Only appears if Done) ---
                             if ($is_done) {
                                 echo '<div style="margin-top: 15px; padding-top: 10px; border-top: 1px solid #eee; width: 100%;">';
                                 
@@ -209,7 +203,25 @@ $conn = null;
         </div>
         
     </div> 
+	
+    <div id="feedbackModal" class="modal-overlay">
+    <div class="modal-content">
+        <span id="closeFeedback" class="modal-close">&times;</span>
+        <h2 style="color: #007bff; margin-top: 0;">Submit Feedback</h2>
+        <p style="color: #666; font-size: 14px;">Have a suggestion for the facility? Let us know!</p>
 
+        <form action="submit_feedback.php" method="post">
+            <label>Subject:</label>
+            <input type="text" name="subject" placeholder="e.g., Gym Lights" required style="width: 100%; padding: 8px; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 4px;">
+
+            <label>Details:</label>
+            <textarea name="details" rows="4" placeholder="Describe your suggestion..." required style="width: 100%; padding: 8px; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 4px;"></textarea>
+
+            <button type="submit" style="width: 100%; background-color: #007bff; color: white; padding: 10px; border: none; border-radius: 4px; cursor: pointer;">Submit</button>
+        </form>
+    </div>
+</div>
+    
     <div id="chat-bubble">💬</div>
 
     <div id="chat-window">
@@ -229,7 +241,6 @@ $conn = null;
     </div>
 
     <script>
-        // Chatbot Script
         const chatBubble = document.getElementById('chat-bubble');
         const chatWindow = document.getElementById('chat-window');
         const chatClose = document.getElementById('chat-close');
@@ -268,6 +279,24 @@ $conn = null;
             if (text.includes('account') || text.includes('logout')) { return "You can log out using the link in the header."; }
             return "I'm sorry, I don't understand. Try asking about 'maintenance' or 'account'.";
         }
+        
+const modal = document.getElementById('feedbackModal');
+const btn = document.getElementById('openFeedback');
+const span = document.getElementById('closeFeedback');
+
+btn.onclick = function() {
+    modal.style.display = "flex";
+}
+
+span.onclick = function() {
+    modal.style.display = "none";
+}
+
+window.onclick = function(event) {
+    if (event.target == modal) {
+        modal.style.display = "none";
+    }
+}
     </script>
 </body>
 </html>
