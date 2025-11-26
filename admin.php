@@ -1,5 +1,4 @@
 <?php
-// Start the session to access session variables
 session_start();
 
 // --- 1. ADMIN-ONLY Bouncer ---
@@ -10,22 +9,19 @@ if ( !isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin' ) {
 
 $username = $_SESSION['username'];
 
-// --- Database Connection ---
+// --- 2. Database Connection ---
 require 'db_connect.php';
 
 $all_tasks = [];
 $all_users = [];
+$all_general_feedback = [];
 
 try {
-    $conn = new PDO("mysql:host=$servername;port=$port;dbname=$dbname", $db_username, $db_password);
-    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
-    // --- 3. Fetch ALL Tasks (with user info) ---
+    // --- 3. Fetch ALL Tasks ---
     $sql_tasks = "SELECT tasks.*, users.username 
                   FROM tasks 
                   JOIN users ON tasks.user_id = users.id 
                   ORDER BY tasks.submission_date DESC";
-    
     $stmt_tasks = $conn->prepare($sql_tasks);
     $stmt_tasks->execute();
     $all_tasks = $stmt_tasks->fetchAll(PDO::FETCH_ASSOC);
@@ -36,19 +32,26 @@ try {
     $stmt_users->execute();
     $all_users = $stmt_users->fetchAll(PDO::FETCH_ASSOC);
 
+    // --- 5. Fetch General Feedback ---
+    $sql_feedback = "SELECT feedback.*, users.username 
+                     FROM feedback 
+                     JOIN users ON feedback.user_id = users.id 
+                     ORDER BY feedback.submitted_at DESC";
+    $stmt_feedback = $conn->prepare($sql_feedback);
+    $stmt_feedback->execute();
+    $all_general_feedback = $stmt_feedback->fetchAll(PDO::FETCH_ASSOC);
+
 } catch(PDOException $e) {
     $db_error = "Error connecting to database: " . $e->getMessage();
 }
-$conn = null;
-
 ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Portal</title>
-    <link rel="stylesheet" href="style.css">
+    <title>ADMIN PORTAL</title>
+    <link rel="stylesheet" href="style-kineme.css">
     
     <style>
         .full-width-card { flex: 1; }
@@ -62,7 +65,7 @@ $conn = null;
 <body>
 
     <header>
-        <h1>🛠️ Admin Portal 🛠️</h1>
+        <h1>🛠️ ADMIN PORTAL</h1>
         
         <div style="background-color: #003a75; padding: 10px; border-radius: 5px; margin-top: 15px; display: inline-block;">
             Welcome, Admin <strong><?php echo htmlspecialchars($username); ?>!</strong>
@@ -74,11 +77,44 @@ $conn = null;
         
         <a href="index.php" style="text-decoration: none; font-weight: bold; color: #007bff;">&larr; Back to Main Portal</a>
 
-        <div class="card full-width-card">
+        <div class="card full-width-card" style="border-left: 5px solid #007bff;">
             <div style="display: flex; justify-content: space-between; align-items: center;">
-    <h2 style="color: #0099cc; margin: 0;">All Users Feedback & Assignments</h2>
-    <a href="admin_download.php?type=feedback" style="background-color: #28a745; color: white; padding: 8px 15px; text-decoration: none; border-radius: 4px; font-size: 14px;">Download CSV</a>
-</div>
+                <h2 style="color: #007bff; margin: 0;">General Facility Suggestions</h2>
+                <a href="admin_download.php?type=general_feedback" style="background-color: #007bff; color: white; padding: 8px 15px; text-decoration: none; border-radius: 4px; font-size: 14px;">Download CSV</a>
+            </div>
+            <p style="color: #666; font-size: 14px;">Ideas and suggestions submitted via the "Give Feedback" button.</p>
+            
+            <?php if (empty($all_general_feedback)): ?>
+                <p>No general suggestions submitted yet.</p>
+            <?php else: ?>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Submitted By</th>
+                            <th>Subject</th>
+                            <th>Details / Message</th>
+                            <th>Date Submitted</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($all_general_feedback as $item): ?>
+                            <tr>
+                                <td style="font-weight: bold;"><?php echo htmlspecialchars($item['username']); ?></td>
+                                <td><?php echo htmlspecialchars($item['subject']); ?></td>
+                                <td><?php echo htmlspecialchars($item['details']); ?></td>
+                                <td><?php echo htmlspecialchars($item['submitted_at']); ?></td>
+                            </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+            <?php endif; ?>
+        </div>
+
+        <div class="card full-width-card" style="border-left: 5px solid #007bff;">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <h2 style="color: #007bff; margin: 0;">All Users Feedback & Assignments</h2>
+                <a href="admin_download.php?type=feedback" style="background-color: #007bff; color: white; padding: 8px 15px; text-decoration: none; border-radius: 4px; font-size: 14px;">Download CSV</a>
+            </div>
             <p style="color: #666; font-size: 14px;">Manage worker assignments and view user feedback upon completion.</p>
             
             <?php if (isset($db_error)): ?>
@@ -131,11 +167,11 @@ $conn = null;
             <?php endif; ?>
         </div>
 
-        <div class="card full-width-card">
+        <div class="card full-width-card" style="border-left: 5px solid #007bff;">
             <div style="display: flex; justify-content: space-between; align-items: center;">
-    <h2 style="color: #0099cc; margin: 0;">All Users Maintenance Schedule</h2>
-    <a href="admin_download.php?type=tasks" style="background-color: #28a745; color: white; padding: 8px 15px; text-decoration: none; border-radius: 4px; font-size: 14px;">Download CSV</a>
-</div>
+                <h2 style="color: #007bff; margin: 0;">All Users Maintenance Schedule</h2>
+                <a href="admin_download.php?type=tasks" style="background-color: #007bff; color: white; padding: 8px 15px; text-decoration: none; border-radius: 4px; font-size: 14px;">Download CSV</a>
+            </div>
             <p style="color: #666; font-size: 14px;">Track priorities, deadlines, and update task status.</p>
             
             <?php if (empty($all_tasks)): ?>
@@ -205,11 +241,11 @@ $conn = null;
             <?php endif; ?>
         </div>
 
-        <div class="card full-width-card">
+        <div class="card full-width-card" style="border-left: 5px solid #007bff;">
             <div style="display: flex; justify-content: space-between; align-items: center;">
-    <h2 style="color: #0099cc; margin: 0;">All User Accounts</h2>
-    <a href="admin_download.php?type=users" style="background-color: #28a745; color: white; padding: 8px 15px; text-decoration: none; border-radius: 4px; font-size: 14px;">Download CSV</a>
-</div>
+                <h2 style="color: #007bff; margin: 0;">All User Accounts</h2>
+                <a href="admin_download.php?type=users" style="background-color: #007bff; color: white; padding: 8px 15px; text-decoration: none; border-radius: 4px; font-size: 14px;">Download CSV</a>
+            </div>
             
             <?php if (empty($all_users)): ?>
                 <p>No users found.</p>
