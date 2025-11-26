@@ -23,7 +23,24 @@ if (isset($_GET['type'])) {
         
         // Open the output stream
         $output = fopen('php://output', 'w');
-
+		
+        // =============================================
+        // EXPORT: GENERAL SUGGESTIONS
+        // =============================================
+        } elseif ($type == 'general_feedback') {
+            fputcsv($output, ['Submitted By', 'Subject', 'Message', 'Date Submitted']);
+            
+            $sql = "SELECT u.username, f.subject, f.details, f.submitted_at 
+                    FROM feedback f 
+                    JOIN users u ON f.user_id = u.id 
+                    ORDER BY f.submitted_at DESC";
+            $stmt = $conn->prepare($sql);
+            $stmt->execute();
+            
+            while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                fputcsv($output, $row);
+            }
+        
         // =============================================
         // EXPORT 1: FEEDBACK & ASSIGNMENTS VIEW
         // =============================================
