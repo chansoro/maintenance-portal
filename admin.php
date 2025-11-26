@@ -140,13 +140,17 @@ try {
                                 <td><?php echo htmlspecialchars($task['details']); ?></td>
                                 
                                 <td>
-                                    <form action="admin_assign.php" method="POST" style="display:flex; gap:5px;">
+                                    <form action="admin_assign.php" method="POST" style="display:flex; gap:5px; align-items: center;">
+                                        
                                         <input type="hidden" name="task_id" value="<?php echo $task['id']; ?>">
+                                        
                                         <input type="text" name="worker" 
                                                value="<?php echo htmlspecialchars($task['assigned_worker'] ?? ''); ?>" 
                                                placeholder="Enter name" 
-                                               style="width: 120px; padding: 5px; font-size: 12px; border: 1px solid #ccc; border-radius: 3px;">
-                                        <button type="submit" style="font-size: 10px; padding: 5px 8px; background: #007bff; color: white; border: none; border-radius: 3px; cursor: pointer;">Save</button>
+                                               style="width: 120px; height: 30px; padding: 0 8px; font-size: 12px; border: 1px solid #ccc; border-radius: 3px; margin: 0; box-sizing: border-box;">
+                                        
+                                        <button type="submit" style="height: 30px; padding: 0 10px; background: #007bff; color: white; border: none; border-radius: 3px; cursor: pointer; margin: 0; font-size: 12px; box-sizing: border-box;">Save</button>
+                                    
                                     </form>
                                 </td>
 
