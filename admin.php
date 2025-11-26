@@ -50,7 +50,7 @@ try {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ADMIN PORTAL</title>
+    <title>Admin Portal</title>
     <link rel="stylesheet" href="style-kineme.css">
     
     <style>
@@ -65,12 +65,13 @@ try {
 <body>
 
     <header>
-        <h1>🛠️ ADMIN PORTAL</h1>
+        <h1>🛠️ Admin Portal 🛠️</h1>
         
-        <div style="background-color: #003a75; padding: 10px; border-radius: 5px; margin-top: 15px; display: inline-block;">
-            Welcome, Admin <strong><?php echo htmlspecialchars($username); ?>!</strong>
-            <a href="logout.php" style="color: #ffb3b3; margin-left: 20px; text-decoration: underline;">Logout</a>
-        </div>
+        <div class="user-menu">
+        <span>Welcome, Admin <strong><?php echo htmlspecialchars($username); ?>!</strong></span>
+
+        <a href="logout.php" class="header-btn logout-link">Logout</a>
+    </div>
     </header>
 
     <div class="container" style="flex-direction: column; gap: 30px;">
