@@ -13,11 +13,7 @@ $username = $_SESSION['username'];
 $user_id = $_SESSION['user_id'];
 
 // --- Database Connection ---
-$servername = "sql207.infinityfree.com";
-$db_username = "if0_40254173";
-$db_password = "107MADAFAKA";
-$dbname = "if0_40254173_portal";
-$port = 3306;
+require 'db_connect.php';
 
 $all_suggestions = [];
 
